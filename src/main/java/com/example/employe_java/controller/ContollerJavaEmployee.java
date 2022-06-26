@@ -90,28 +90,29 @@ public class ContollerJavaEmployee {
         }
     }
 
-    @PutMapping("/editemployee/{id}")
-    public ResponseEntity<ModelEmploye> updateEmployee(@PathVariable("id") long id,@RequestBody String param) {
+    @PostMapping("/editemployee/{id}")
+    public ResponseEntity<HttpStatus> updateEmployee(@PathVariable("id") long id,@RequestBody ModelEmploye param) {
         Optional<ModelEmploye> modelEmployee = getEmployeeService.findById(id);
         ModelEmploye empl = null;
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = null;
         try {
             System.out.print(param);
-            jsonNode = objectMapper.readTree(param);
-            empl = objectMapper.treeToValue(jsonNode, ModelEmploye.class);
+//            jsonNode = objectMapper.readTree(param);
+//            empl = objectMapper.treeToValue(jsonNode, ModelEmploye.class);
            if(modelEmployee.isPresent()) {
                ModelEmploye mdls = modelEmployee.get();
-               mdls.setUsername(empl.getUsername());
-               mdls.setFirstName(empl.getUsername());
-               mdls.setFirstName(empl.getFirstName());
-               mdls.setLastName(empl.getLastName());
-               mdls.setEmail(empl.getEmail());
-               mdls.setBirdDate(empl.getBirdDate());
-               mdls.setStatus(empl.getStatus());
-               mdls.setGroup(empl.getGroup());
-               mdls.setDescription(empl.getDescription());
-               return new ResponseEntity<>(getEmployeeService.save(mdls),HttpStatus.OK);
+               mdls.setUsername(param.getUsername());
+               mdls.setFirstName(param.getUsername());
+               mdls.setFirstName(param.getFirstName());
+               mdls.setLastName(param.getLastName());
+               mdls.setEmail(param.getEmail());
+               mdls.setBirdDate(param.getBirdDate());
+               mdls.setStatus(param.getStatus());
+               mdls.setGroup(param.getGroup());
+               mdls.setDescription(param.getDescription());
+               getEmployeeService.save(mdls);
+               return new ResponseEntity<>(HttpStatus.OK);
            }else{
                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
            }
